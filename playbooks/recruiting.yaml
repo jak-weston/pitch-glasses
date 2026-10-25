@@ -1,0 +1,29 @@
+id: recruiting
+name: Candidate screen
+end_phrases:
+  - "thanks for your time"
+  - "that's all my questions"
+silence_seconds: 12
+keyterms: []
+live_lines: |
+  The listener is a hiring manager interviewing a candidate. Find ONE verifiable fact that helps right now:
+  what a company or project the candidate mentions actually does, its size, or a notable public fact about it.
+brief: |
+  Write a one-page candidate summary in markdown. Start with these three lines:
+  **Summary:** <who they are, under 45 characters>
+  **Look into:** <the biggest open question, under 45 characters>
+  **Next step:** <exactly one of: Advance | Reference check | Reject>
+  Then exactly these sections:
+  ## Background
+  (3 bullets: roles, companies, scope)
+  ## Claims worth verifying
+  (specific claims the candidate made, with what public info says)
+  ## Strengths and gaps
+  ## Questions for the next round
+  (3 sharp questions)
+  Cite sources inline as (domain.com).
+followup: |
+  Read the summary's "Next step" line and draft the matching email to the candidate: Advance -> invite to the next
+  round; Reference check -> ask for two references; Reject -> kind, specific decline. Reference one thing they said.
+voice_samples:
+  - "Thanks for making the time today - really enjoyed hearing about"

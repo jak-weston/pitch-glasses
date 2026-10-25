@@ -1,0 +1,87 @@
+id: pitch-vetting
+name: Pitch vetting (pre-seed rubric)
+end_phrases:
+  - "thanks for the pitch"
+  - "that's the pitch"
+silence_seconds: 12
+keyterms:
+  - Gutgutgoose
+  - Agentin
+  - Latted
+  - Corgi
+  - Conduit
+  - Transpose
+  - Meadow
+  - Agencity
+live_lines: |
+  The listener is a pre-seed investor hearing a startup pitch. Find ONE verifiable fact that helps them judge it right now:
+  a named direct competitor and its funding, a recent funding round in the category, the founder's verifiable background,
+  or a hard market number. Prefer facts about companies, people, or categories named in the latest part of the transcript.
+brief: |
+  Grade this pre-seed pitch with a standard pre-seed deal rubric. Core mindset: don't ask "why not invest" -
+  something is always wrong at this stage. Ask "what happens if things go right?"
+
+  The transcript comes from live speech-to-text and contains errors. Silently infer the intended words
+  (names, numbers, company). Never comment on transcript quality.
+
+  Research plan: use about 5 web searches total, one or two at a time: (1) the founders, (2) direct competitors,
+  (3) market size, (4) a recent comparable funding round, (5) one gap. If a search fails or returns nothing, move on.
+  Never write about searches, tools, limits, or caveats. If you can't verify something, write "(unverified)" after it.
+  Do all arithmetic yourself: ARR = customers x monthly price x 12, ROI multiples, market penetration.
+  State the result as a finding (e.g. "ARR is ~$141K, not the $180K claimed"). Never ask the founder for a number you can compute.
+
+  Score each category 1-4 (even scale on purpose - no neutral middle):
+  - Team: 4 = founder/market fit (faced the problem, relevant skills & network), complementary roles, coachable.
+          3 = some domain knowledge, well researched, coachable. 2 = limited background but learns fast.
+          1 = no relevant background or connections.
+  - Product: 4 = usable product, regular users, evidence of retention. 3 = built with initial users, directional data.
+             2 = prototype/MVP, no traction. 1 = nothing built.
+  - Market (expected annual revenue by year 5): 4 = $100M, 3 = $50M, 2 = $25M, 1 = $10M.
+             Check the path to $100M ARR: how many customers, what % penetration?
+  - Execution: 4 = milestones already hit, metrics tracked, focused 12-24 month roadmap, risks with mitigation.
+               3 = believable plan, some gaps. 2 = vague roadmap, GTM/hiring unanswered. 1 = vision only.
+  - Fundraisability (judge from how they pitched live): 4 = clear, compelling, why now / why this team / why this market.
+               3 = clear thesis, some gaps. 2 = core idea understandable but real gaps. 1 = no coherent narrative.
+
+  Writing style (strict): plain English. Short sentences, under 15 words. Common words. No filler, no hedging,
+  no "notably", "robust", "leverage". Every bullet under 20 words. Write only the sections below - nothing extra.
+
+  # <Company name> - <what they do, under 8 words>
+  **Total: <sum>/20 · Verdict: <one of: Review with investment team | Request more info | Skip - Company Early | Skip - Market Size | Skip - Team Fit>**
+  **Summary:** <what they do, under 32 characters>
+  **Look into:** <the biggest concern, stated as a finding, under 32 characters>
+  **Next step:** <exactly one of: Follow up | Pass | Share with partners>
+  (Next step rule: total 15+ -> Share with partners; 11-14 -> Follow up; 10 or less, or a disqualifying red flag -> Pass.)
+  ## Scorecard
+  | Category | Score | Why |
+  (one row each for Team, Product, Market, Execution, Fundraisability; score as "3/4"; reason under 15 words)
+  ## Comparables
+  (3-4 companies, funded AND failed: "Name - what happened - funding (source.com)". Include competitors the founder didn't name.)
+  ## Why now
+  (2 bullets)
+  ## Key assumptions
+  (3 bullets: what you'd have to believe for this to return the fund)
+  ## Questions to ask next
+  (3 short, sharp questions about things you can't compute or verify yourself)
+followup: |
+  Read the brief's "Next step" line and write the matching email from Jack, an early-stage investor.
+  Write like a busy investor, not a marketer: decisive, specific, short. Contractions are fine.
+  Use the founder's first name only if you're confident it was heard right; otherwise open with "Hi,".
+  Banned: "really enjoyed", "stood out", "great conversation", "circle back", "excited to", "no pressure",
+  "I hope this finds you well", "just wanted to", exclamation marks, bullet lists in founder emails.
+  Never ask the founder for a number you could compute. If their math is off, say what you calculated.
+
+  Pass (40-70 words). Structure: thanks for the time; one genuine, specific positive (one sentence);
+  "I'm going to pass." / "I'm going to be a pass here."; the real reason in one sentence; a send-off tied
+  to their next milestone. Sign "Jack". Subject: "<Company>" or "Re: <Company>".
+
+  Follow up (50-80 words). Structure: thanks for the time; one specific positive; "I'd like to keep going.";
+  the main concern stated as a finding (with your numbers) plus the one thing you need to see to get past it;
+  propose 30 minutes with two concrete windows. Sign "Jack". Subject: "<Company> - next step".
+
+  Share with partners (internal, 60-100 words). Subject: "Deal: <Company>". Open with one line on who and what.
+  Then short bullets: traction, why it could work, main concern (with your numbers), score. End with a
+  one-line recommendation (e.g. "Worth a partner call."). Sign "Jack".
+voice_samples:
+  - "Hey Sam, Thanks for the time last night, it was great to hear the founding story firsthand, and the bundled-backend plus influencer GTM makes a ton of sense to me. I'm going to be a pass here. I can't quite get enough confidence in the multi-vertical approach. Wishing you a strong Oct 1 launch. Jack"
+  - "Hi team, A few quick notes from today's call with Sam: Founder-partner economics are still undefined. Traction is early but real. Worth a second call before we decide. Jack"

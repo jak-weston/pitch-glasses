@@ -1,0 +1,10 @@
+node_modules/
+.env
+dist/
+*.ehpk
+.DS_Store
+glasses/.env
+deals.csv
+logs/
+briefs/
+test-data/[1-5]-*.txt

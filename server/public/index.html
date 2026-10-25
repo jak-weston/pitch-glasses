@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pitch Glasses</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <style>
+    :root { --bg:#0e1110; --panel:#171b19; --line:#2a302d; --text:#e8ece9; --muted:#8a948f; --accent:#5dff9b; --warn:#ffb35d; --red:#ff7a7a; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 -apple-system, system-ui, sans-serif; }
+    header { display:flex; gap:12px; align-items:center; padding:14px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+    header h1 { font-size:18px; margin:0 8px 0 0; }
+    .tabs { display:flex; gap:4px; margin-right:auto; }
+    .tab { background:none; border:1px solid transparent; color:var(--muted); padding:6px 12px; border-radius:8px; cursor:pointer; font:inherit; }
+    .tab.active { color:var(--text); border-color:var(--line); background:var(--panel); }
+    .pill { padding:3px 10px; border-radius:999px; background:var(--panel); border:1px solid var(--line); color:var(--muted); font-size:13px; }
+    .pill.live { color:var(--bg); background:var(--accent); border-color:var(--accent); }
+    button, select { background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:7px 12px; font:inherit; cursor:pointer; }
+    button.primary, a.primary { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+    a.btn { display:inline-block; text-decoration:none; border:1px solid var(--line); border-radius:8px; padding:7px 12px; color:var(--text); }
+    main { padding:16px 20px; }
+    .live-grid { display:grid; grid-template-columns: 380px 1fr; gap:16px; }
+    @media (max-width: 960px) { .live-grid { grid-template-columns: 1fr; } }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+    .where { display:flex; align-items:center; gap:8px; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 10px; }
+    .where .tag { padding:2px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; }
+    .tag.glasses { background:rgba(93,255,155,.15); color:var(--accent); }
+    .tag.laptop { background:rgba(138,148,143,.15); color:var(--text); }
+    .flow { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; color:var(--muted); font-size:13px; }
+    .flow b { color:var(--text); font-weight:600; }
+    .glasses { font-family: ui-monospace, Menlo, monospace; color:var(--accent); background:#000; border-radius:10px; padding:14px; min-height:150px; white-space:pre-wrap; text-shadow:0 0 6px rgba(93,255,155,.5); }
+    #lines div { padding:6px 0; border-bottom:1px solid var(--line); color:var(--accent); font-family: ui-monospace, Menlo, monospace; font-size:14px; }
+    #transcript { max-height:200px; overflow:auto; color:var(--muted); font-size:14px; }
+    #transcript .interim { opacity:.5; }
+    .brief-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px; }
+    #brief { font-size:16px; }
+    #brief h1 { font-size:22px; margin:0 0 6px; }
+    #brief h2 { color:var(--accent); font-size:14px; margin-top:18px; text-transform:uppercase; letter-spacing:.05em; }
+    #brief table, .deals table { width:100%; border-collapse:collapse; margin:8px 0; }
+    #brief th, #brief td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+    #brief td:nth-child(2) { color:var(--accent); font-weight:700; white-space:nowrap; font-family: ui-monospace, Menlo, monospace; }
+    #followup pre { white-space:pre-wrap; font:inherit; margin:8px 0 0; }
+    .row { display:flex; gap:8px; margin-top:10px; }
+    #error { color:var(--warn); font-size:13px; }
+    .deals th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:8px 10px; border-bottom:1px solid var(--line); cursor:pointer; white-space:nowrap; }
+    .deals td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }
+    .deals tr.deal:hover td { background:#1c211f; cursor:pointer; }
+    .score { font-family: ui-monospace, Menlo, monospace; font-weight:700; }
+    .s-high { color:var(--accent); } .s-mid { color:var(--warn); } .s-low { color:var(--red); }
+    .chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid var(--line); white-space:nowrap; }
+    .detail td { background:#121614; }
+    .detail .brief-md { max-width:900px; }
+    .empty { color:var(--muted); padding:30px; text-align:center; }
+    [hidden] { display:none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pitch Glasses</h1>
+    <nav class="tabs">
+      <button class="tab active" data-tab="live">Live</button>
+      <button class="tab" data-tab="deals">Deals</button>
+    </nav>
+    <span id="phase" class="pill">idle</span>
+    <select id="playbook"></select>
+    <button id="tap" class="primary">Start listening</button>
+    <button id="mic">Use laptop mic</button>
+    <span id="error"></span>
+  </header>
+
+  <main id="tab-live">
+    <div class="flow">
+      <span><b>1.</b> Glasses mic hears the pitch</span>›
+      <span><b>2.</b> Laptop transcribes + researches</span>›
+      <span><b>3.</b> Facts &amp; wrap-up card appear on the glasses</span>›
+      <span><b>4.</b> Full brief + PDF land here on the laptop</span>›
+      <span><b>5.</b> Tap the glasses to send the email</span>
+    </div>
+    <div class="live-grid">
+      <div style="display:grid; gap:16px; align-content:start">
+        <section>
+          <div class="where"><span class="tag glasses">On your glasses</span> live mirror of the lens</div>
+          <div id="glasses" class="glasses">Tap to start listening</div>
+        </section>
+        <section>
+          <div class="where"><span class="tag glasses">On your glasses</span> live facts, one at a time</div>
+          <div id="lines"><div style="color:var(--muted); font-family:inherit">Sourced facts appear while they talk.</div></div>
+        </section>
+        <section>
+          <div class="where"><span class="tag laptop">Laptop only</span> live transcript</div>
+          <div id="transcript"></div>
+        </section>
+      </div>
+      <div style="display:grid; gap:16px; align-content:start">
+        <section>
+          <div class="brief-head">
+            <div class="where" style="margin:0"><span class="tag laptop">Laptop only</span> the brief</div>
+            <a id="pdf" class="btn primary" target="_blank" hidden>Open PDF</a>
+          </div>
+          <div id="brief"><p style="color:var(--muted)">The one-page brief appears here when the pitch ends, and is saved as a PDF in the Deals tab.</p></div>
+        </section>
+        <section id="followup" hidden>
+          <div class="where"><span class="tag laptop">Laptop</span> drafted email · <span class="tag glasses">Glasses</span> tap = send, swipe = skip</div>
+          <strong id="fu-subject"></strong><pre id="fu-body"></pre>
+          <div class="row"><button id="approve" class="primary">Approve &amp; send</button><button id="reject">Skip</button></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <main id="tab-deals" hidden>
+    <section class="deals">
+      <div class="brief-head">
+        <div class="where" style="margin:0"><span class="tag laptop">Laptop only</span> every pitch you've heard · click a row for details</div>
+        <a class="btn" href="/api/deals" target="_blank">Raw data (JSON)</a>
+      </div>
+      <table>
+        <thead><tr>
+          <th data-sort="Date">Date</th><th data-sort="Company">Company</th><th data-sort="Total Score">Score</th>
+          <th>T · P · M · E · F</th><th data-sort="Next Step">Next step</th><th>Look into</th><th>Brief</th>
+        </tr></thead>
+        <tbody id="deal-rows"><tr><td colspan="7" class="empty">No pitches yet.</td></tr></tbody>
+      </table>
+    </section>
+  </main>
+
+<script>
+marked.setOptions({ breaks: true });
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
+ws.binaryType = "arraybuffer";
+const send = (msg) => ws.send(JSON.stringify(msg));
+let interimEl = null;
+
+// Tabs
+document.querySelectorAll(".tab").forEach((t) => t.onclick = () => {
+  document.querySelectorAll(".tab").forEach((x) => x.classList.toggle("active", x === t));
+  $("tab-live").hidden = t.dataset.tab !== "live";
+  $("tab-deals").hidden = t.dataset.tab !== "deals";
+  if (t.dataset.tab === "deals") loadDeals();
+});
+
+ws.onmessage = (m) => {
+  const msg = JSON.parse(m.data);
+  if (msg.type === "hello") { renderPlaybooks(msg); msg.events.forEach(handle); return; }
+  handle(msg);
+};
+
+function renderPlaybooks(s) {
+  $("playbook").innerHTML = s.playbooks.map(p => `<option value="${p.id}" ${p.id === s.playbook ? "selected" : ""}>${esc(p.name)}</option>`).join("");
+}
+
+function handle(e) {
+  if (e.glasses) $("glasses").textContent = e.glasses;
+  switch (e.type) {
+    case "status":
+      $("phase").textContent = e.phase.replace("_", " ");
+      $("phase").classList.toggle("live", e.phase === "listening");
+      $("tap").textContent = { idle: "Start listening", listening: "Pitch is over", briefing: "Working...", awaiting_approval: "Approve & send" }[e.phase];
+      if (e.playbooks) renderPlaybooks(e);
+      if (e.phase === "listening") {
+        $("lines").innerHTML = ""; $("transcript").innerHTML = ""; $("followup").hidden = true; $("pdf").hidden = true; $("error").textContent = "";
+        $("brief").innerHTML = '<p style="color:var(--muted)">Listening...</p>';
+      }
+      if (e.phase === "briefing") $("brief").innerHTML = '<p style="color:var(--muted)">Researching and writing the brief (about 40 seconds)...</p>';
+      break;
+    case "transcript": {
+      if (!interimEl) { interimEl = document.createElement("span"); $("transcript").appendChild(interimEl); }
+      interimEl.textContent = e.text + " ";
+      interimEl.className = e.final ? "" : "interim";
+      if (e.final) interimEl = null;
+      $("transcript").scrollTop = 1e9;
+      break;
+    }
+    case "line": { const d = document.createElement("div"); d.textContent = e.text; $("lines").prepend(d); break; }
+    case "brief": $("brief").innerHTML = marked.parse(e.markdown || "_No brief generated._"); break;
+    case "brief_pdf": $("pdf").href = e.url; $("pdf").hidden = false; break;
+    case "followup": $("fu-subject").textContent = e.subject; $("fu-body").textContent = e.body; $("followup").hidden = false; break;
+    case "result": $("error").textContent = ""; $("glasses").textContent = e.message; break;
+    case "error": $("error").textContent = e.message; break;
+  }
+}
+
+$("tap").onclick = () => send({ type: "tap" });
+$("approve").onclick = () => send({ type: "approve" });
+$("reject").onclick = () => send({ type: "reject" });
+$("playbook").onchange = (ev) => send({ type: "playbook", id: ev.target.value });
+
+// Deals tab
+let deals = [];
+let sortKey = "Date", sortDir = -1;
+async function loadDeals() {
+  deals = await (await fetch("/api/deals")).json();
+  renderDeals();
+}
+function scoreClass(n) { n = Number(n); return n >= 15 ? "s-high" : n >= 11 ? "s-mid" : "s-low"; }
+function renderDeals() {
+  const sorted = [...deals].sort((a, b) => {
+    const x = a[sortKey] ?? "", y = b[sortKey] ?? "";
+    return (isNaN(x) || isNaN(y) ? String(x).localeCompare(String(y)) : Number(x) - Number(y)) * sortDir;
+  });
+  if (!sorted.length) { $("deal-rows").innerHTML = '<tr><td colspan="7" class="empty">No pitches yet.</td></tr>'; return; }
+  $("deal-rows").innerHTML = sorted.map((d, i) => `
+    <tr class="deal" data-i="${i}">
+      <td>${esc(new Date(d.Date).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }))}</td>
+      <td><strong>${esc(d.Company || "Unnamed")}</strong><br><span style="color:var(--muted)">${esc(d.Summary)}</span></td>
+      <td><span class="score ${scoreClass(d["Total Score"])}">${esc(d["Total Score"] || "–")}/20</span></td>
+      <td class="score" style="color:var(--muted)">${["Team","Product","Market","Execution","Fundraisability"].map((k) => esc(d[k] || "–")).join(" · ")}</td>
+      <td><span class="chip">${esc(d["Next Step"] || "–")}</span></td>
+      <td>${esc(d["Look Into"])}</td>
+      <td>${d.pdfUrl ? `<a class="btn" href="${esc(d.pdfUrl)}" target="_blank" onclick="event.stopPropagation()">PDF</a>` : '<span style="color:var(--muted)">–</span>'}</td>
+    </tr>
+    <tr class="detail" data-for="${i}" hidden><td colspan="7">
+      <div class="brief-md">${marked.parse(d.Brief || "")}</div>
+      <h3 style="margin-top:16px">Drafted email: ${esc(d["Follow-up Subject"])}</h3>
+      <pre style="white-space:pre-wrap; font:inherit; color:var(--muted)">${esc(d["Follow-up Body"])}</pre>
+    </td></tr>`).join("");
+  document.querySelectorAll("tr.deal").forEach((tr) => tr.onclick = () => {
+    const detail = document.querySelector(`tr.detail[data-for="${tr.dataset.i}"]`);
+    detail.hidden = !detail.hidden;
+  });
+}
+document.querySelectorAll(".deals th[data-sort]").forEach((th) => th.onclick = () => {
+  sortDir = sortKey === th.dataset.sort ? -sortDir : -1;
+  sortKey = th.dataset.sort;
+  renderDeals();
+});
+
+// Fallback audio source: laptop mic -> 16 kHz PCM16 -> server.
+let micCtx = null;
+$("mic").onclick = async () => {
+  if (micCtx) { micCtx.close(); micCtx = null; $("mic").textContent = "Use laptop mic"; return; }
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } });
+  micCtx = new AudioContext({ sampleRate: 16000 });
+  const worklet = `class P extends AudioWorkletProcessor { process(inputs) { const ch = inputs[0][0]; if (ch) { const out = new Int16Array(ch.length); for (let i = 0; i < ch.length; i++) { const s = Math.max(-1, Math.min(1, ch[i])); out[i] = s < 0 ? s * 0x8000 : s * 0x7fff; } this.port.postMessage(out.buffer, [out.buffer]); } return true; } } registerProcessor("pcm", P);`;
+  await micCtx.audioWorklet.addModule(URL.createObjectURL(new Blob([worklet], { type: "application/javascript" })));
+  const node = new AudioWorkletNode(micCtx, "pcm");
+  node.port.onmessage = (ev) => { if (ws.readyState === 1) ws.send(ev.data); };
+  micCtx.createMediaStreamSource(stream).connect(node);
+  $("mic").textContent = "Laptop mic ON";
+};
+</script>
+</body>
+</html>
