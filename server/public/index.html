@@ -6,7 +6,7 @@
   <title>Pitch Glasses</title>
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
   <style>
-    :root { --bg:#0e1110; --panel:#171b19; --line:#2a302d; --text:#e8ece9; --muted:#8a948f; --accent:#5dff9b; --warn:#ffb35d; --red:#ff7a7a; }
+    :root { --bg:#f5f7f6; --panel:#ffffff; --line:#e1e6e3; --text:#16201b; --muted:#66716b; --accent:#13a058; --accent-ink:#ffffff; --lens:#5dff9b; --warn:#c77a12; --red:#d14343; --hover:#f0f4f2; }
     * { box-sizing: border-box; }
     body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 -apple-system, system-ui, sans-serif; }
     header { display:flex; gap:12px; align-items:center; padding:14px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
@@ -15,21 +15,21 @@
     .tab { background:none; border:1px solid transparent; color:var(--muted); padding:6px 12px; border-radius:8px; cursor:pointer; font:inherit; }
     .tab.active { color:var(--text); border-color:var(--line); background:var(--panel); }
     .pill { padding:3px 10px; border-radius:999px; background:var(--panel); border:1px solid var(--line); color:var(--muted); font-size:13px; }
-    .pill.live { color:var(--bg); background:var(--accent); border-color:var(--accent); }
+    .pill.live { color:var(--accent-ink); background:var(--accent); border-color:var(--accent); }
     button, select { background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:7px 12px; font:inherit; cursor:pointer; }
-    button.primary, a.primary { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+    button.primary, a.primary { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-weight:600; }
     a.btn { display:inline-block; text-decoration:none; border:1px solid var(--line); border-radius:8px; padding:7px 12px; color:var(--text); }
     main { padding:16px 20px; }
     .live-grid { display:grid; grid-template-columns: 380px 1fr; gap:16px; }
     @media (max-width: 960px) { .live-grid { grid-template-columns: 1fr; } }
-    section { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
     .where { display:flex; align-items:center; gap:8px; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:0 0 10px; }
     .where .tag { padding:2px 8px; border-radius:6px; font-weight:700; letter-spacing:.04em; }
-    .tag.glasses { background:rgba(93,255,155,.15); color:var(--accent); }
-    .tag.laptop { background:rgba(138,148,143,.15); color:var(--text); }
+    .tag.glasses { background:rgba(19,160,88,.12); color:var(--accent); }
+    .tag.laptop { background:#eef1ef; color:var(--text); }
     .flow { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; color:var(--muted); font-size:13px; }
     .flow b { color:var(--text); font-weight:600; }
-    .glasses { font-family: ui-monospace, Menlo, monospace; color:var(--accent); background:#000; border-radius:10px; padding:14px; min-height:150px; white-space:pre-wrap; text-shadow:0 0 6px rgba(93,255,155,.5); }
+    .lens { font-family: ui-monospace, Menlo, monospace; color:var(--lens); background:#000; border-radius:10px; padding:14px; min-height:150px; white-space:pre-wrap; text-shadow:0 0 6px rgba(93,255,155,.5); }
     #lines div { padding:6px 0; border-bottom:1px solid var(--line); color:var(--accent); font-family: ui-monospace, Menlo, monospace; font-size:14px; }
     #transcript { max-height:200px; overflow:auto; color:var(--muted); font-size:14px; }
     #transcript .interim { opacity:.5; }
@@ -45,11 +45,11 @@
     #error { color:var(--warn); font-size:13px; }
     .deals th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:8px 10px; border-bottom:1px solid var(--line); cursor:pointer; white-space:nowrap; }
     .deals td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }
-    .deals tr.deal:hover td { background:#1c211f; cursor:pointer; }
+    .deals tr.deal:hover td { background:var(--hover); cursor:pointer; }
     .score { font-family: ui-monospace, Menlo, monospace; font-weight:700; }
     .s-high { color:var(--accent); } .s-mid { color:var(--warn); } .s-low { color:var(--red); }
     .chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid var(--line); white-space:nowrap; }
-    .detail td { background:#121614; }
+    .detail td { background:#fafbfa; }
     .detail .brief-md { max-width:900px; }
     .empty { color:var(--muted); padding:30px; text-align:center; }
     [hidden] { display:none !important; }
@@ -81,7 +81,7 @@
       <div style="display:grid; gap:16px; align-content:start">
         <section>
           <div class="where"><span class="tag glasses">On your glasses</span> live mirror of the lens</div>
-          <div id="glasses" class="glasses">Tap to start listening</div>
+          <div id="glasses" class="lens">Tap to start listening</div>
         </section>
         <section>
           <div class="where"><span class="tag glasses">On your glasses</span> live facts, one at a time</div>
