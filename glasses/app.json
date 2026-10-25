@@ -9,7 +9,7 @@
     {
       "name": "network",
       "desc": "Streams audio to and receives facts from the Pitch Glasses server.",
-      "whitelist": ["http://100.69.28.14:8787"]
+      "whitelist": ["http://172.20.10.4:8787"]
     },
     {
       "name": "g2-microphone",

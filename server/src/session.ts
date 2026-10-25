@@ -64,6 +64,7 @@ function wrapUpCard(brief: string): string {
 
 const LIVE_LINE_MIN_GAP_MS = 6000;
 const AUTO_END_MIN_WORDS = 30;
+const MIN_PITCH_WORDS = 40;
 const LIVE_LINE_MIN_NEW_WORDS = 12;
 
 export class Session {
@@ -132,6 +133,11 @@ export class Session {
     if (this.silenceTimer) clearTimeout(this.silenceTimer);
     this.transcriber?.stop();
     this.transcriber = null;
+    // Don't write a brief (or log a deal) for an accidental tap or a clip too short to judge.
+    if (this.transcript.split(/\s+/).filter(Boolean).length < MIN_PITCH_WORDS) {
+      this.setPhase("idle", "Didn't catch enough of the pitch.\n\nTap to try again");
+      return;
+    }
     await this.analyze(this.transcript);
   }
 

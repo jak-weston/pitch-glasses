@@ -23,6 +23,8 @@ brief: |
 
   The transcript comes from live speech-to-text and contains errors. Silently infer the intended words
   (names, numbers, company). Never comment on transcript quality.
+  The company name is often clipped by speech-to-text (e.g. "Pass" for "Border Pass"); use the most
+  complete version heard anywhere in the transcript.
 
   Research plan: use about 5 web searches total, one or two at a time: (1) the founders, (2) direct competitors,
   (3) market size, (4) a recent comparable funding round, (5) one gap. If a search fails or returns nothing, move on.
